@@ -18,10 +18,15 @@ def create_book_list(path):
     with open(path) as f:
         book_list = PositionalList1()
         for elemento in f.readlines():
-            libro_actual = create_book_from_line(elemento.split('; '))
+            book_list.add(create_book_from_line(elemento.split('; ')))
             
+    return book_list
 
-    return None
+def get_avg_loans(bl):
+    
+    pass
 
 if __name__ == "__main__":
-    result = create_book_list(sys.argv[1])
+    ruta = 'libros.txt'
+    listadelibros = create_book_list(ruta)
+    pass
