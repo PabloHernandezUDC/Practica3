@@ -27,14 +27,7 @@ class Book():
             return True
         elif y1 < y2:
             return False
-        
-    def __ge__(self, other):
-        a1, a2 = self.get_author().lower(), other.get_author().lower()
-        if a1 >= a2:
-            return True
-        else:
-            return False
-    
+            
     def get_title(self):
         '''
         '''

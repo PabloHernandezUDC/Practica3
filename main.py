@@ -45,6 +45,3 @@ def get_avg_loans(bl):
 if __name__ == "__main__":
     ruta = 'libros.txt'
     listadelibros = create_book_list(ruta)
-    for i in listadelibros:
-        if 'Ruiz' in i.get_author():
-            print(i.get_author(), i.get_title(), i.get_year(), i.get_loans(), sep = ' | ')

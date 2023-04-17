@@ -135,7 +135,7 @@ class LinkedOrderedPositionalList(_DoublyLinkedBase):
         return self._add_last(e)
     else:
         p = self.last()
-        while p != None and self.get_element(p) >= e:
+        while p != None and self.get_element(p) > e:
             p = self.before(p)
         if p == None:
             return self._add_first(e)

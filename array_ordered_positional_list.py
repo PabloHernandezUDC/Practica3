@@ -87,7 +87,7 @@ class ArrayOrderedPositionalList:
     else:
         self._data.append(None)  # increase the size of data
         p = len(self._data) - 2
-        while p >= 0 and self._data[p] >= e:
+        while p >= 0 and self._data[p] > e:
             self._data[p + 1] = self._data[p]
             p -= 1
         self._data[p + 1] = e 
