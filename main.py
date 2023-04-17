@@ -17,7 +17,7 @@ def print_menu():
     '''
     print('\nSISTEMA DE BIBLIOTECA\n')
     print('OPCIONES:')
-    print('-> 1. Leer un fichero y crear una lista ordenada con ellos.')
+    print('-> 1. Leer un fichero y crear una lista ordenada de libros.')
     print('-> 2. Determinar la media de préstamos por libro.')
     print('-> 3. Eliminar libros con mismo título y autor, dejando la versión más reciente.')
     print('-> 4. Consultar que libros quedan en la biblioteca.')
@@ -25,6 +25,16 @@ def print_menu():
     print('->     4b. Por año.')
     print('->     4c. Por autor.')
     print('-> 5. Cerrar el programa.\n')
+
+def ask_for_option():
+    '''
+    '''
+    opt = int(input('Introduzca la opción que desee utilizar: '))
+    while type(opt) is not int or not 1 <= opt <= 5:
+        print('Esa opción es incorrecta.')
+        opt = int(input('Introduzca la opción que desee utilizar: '))
+    
+    return opt
 
 def create_book_list(path):
     '''
@@ -36,27 +46,93 @@ def create_book_list(path):
             
     return book_list
 
-def get_avg_loans(bl):
+def avg_loans(bl):
     sum, n = 0, 0
-    avg_loans = {}
-    current_title = ''
-    # recorrer la lista
-    # almacenar el titulo actual y sumarle 1 a n
-    # guardar loans en sum
-    # si el titulo cambia resetear sum y n, y devolver la media
-    
     for libro in bl:
-        if current_title == libro.get_title():
-            sum += libro.get_loans()
-            n += 1
-        else:
-            avg_loans[current_title] = sum/n
-            current_title = libro.get_title()
-            sum, n = 0, 0
-    
-    print(avg_loans)
+        sum += libro.get_loans()
+        n += 1
+    print('La media de préstamos es de {}.'.format(round(sum/n, 2)))
+
+def remove_duplicates(bl):
+    unique_books = PositionalList1()
+    for libro in bl:
+        if libro not in unique_books:
+            unique_books.add(libro)
+
+def show_books(bl, suboption):
+    if suboption == 'a':
+        print('\n-------------------------------------------------------------------------------------------------------------------')
+        print('|  {:<37}|  {:<30}|  {:<18}|  {:<17}|'.format('Título', 'Autor', 'Año de edición', 'Nº de préstamos'))
+        print('-------------------------------------------------------------------------------------------------------------------')
+        for libro in bl:
+            print('|  {:<37}|  {:<30}|  {:<18}|  {:<17}|'.format(
+                libro.get_title(),
+                libro.get_author(),
+                libro.get_year(),
+                libro.get_loans()
+            ))
+        print('-------------------------------------------------------------------------------------------------------------------\n')        
 
 if __name__ == "__main__":
+    '''
     print_menu()
+    lista_de_libros = None
+    '''
+    lista_de_libros = create_book_list('libros.txt')
+    for i in lista_de_libros:
+        print(i.get_author(), i.get_title(), i.get_year(), i.get_loans(), sep = ' | ')
+
+    
+    '''
     while True:
-        option = int(input('Introduzca la opción que desee utilizar:'))
+        # 1. Leer un fichero y crear una lista ordenada de libros.
+        # 2. Determinar la media de préstamos por libro.
+        # 3. Eliminar libros con mismo título y autor, dejando la versión más reciente.
+        # 4. Consultar que libros quedan en la biblioteca.
+        #     4a. Todos.
+        #     4b. Por año.
+        #     4c. Por autor.
+        # 5. Cerrar el programa.
+        option = ask_for_option()
+        
+        if option == 1:
+            ruta = str(input('Introduzca el nombre del archivo que desea utilizar (debe estar en el mismo directorio): '))
+            while type(ruta) is not str:
+                ruta = str(input('Introduzca el nombre del archivo que desea utilizar (debe estar en el mismo directorio): '))
+            while True:
+                try:
+                    lista_de_libros = create_book_list(ruta)
+                    break
+                except:
+                    print('Esa ruta de archivo no es válida. Por favor, introduce otra.')
+                    ruta = str(input('Introduzca el nombre del archivo que desea utilizar (debe estar en el mismo directorio): '))
+                    while type(ruta) is not str:
+                        ruta = str(input('Introduzca el nombre del archivo que desea utilizar (debe estar en el mismo directorio): '))
+        
+        elif option == 2:
+            if lista_de_libros == None:
+                print('Debes ejecutar la opción 1 primero.')
+            else:
+                avg_loans(lista_de_libros)
+        
+        elif option == 3:
+            if lista_de_libros == None:
+                print('Debes ejecutar la opción 1 primero.')
+            else:
+                remove_duplicates(lista_de_libros)
+                print('Hecho.')
+        
+        elif option == 4:
+            if lista_de_libros == None:
+                print('Debes ejecutar la opción 1 primero.')
+            else:
+                subopt = str(input('Introduzca la opción a, b o c: '))
+                while type(subopt) is not str:
+                    subopt = str(input('Introduzca la opción a, b o c: '))
+
+                show_books(lista_de_libros, subopt)
+                
+        elif option == 5:
+            print('Cerrando el programa...\n')
+            quit()
+    '''
