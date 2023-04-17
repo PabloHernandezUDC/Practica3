@@ -12,6 +12,20 @@ def create_book_from_line(params):
     
     return Book(titulo, autor, año, prestamos)
 
+def print_menu():
+    '''
+    '''
+    print('\nSISTEMA DE BIBLIOTECA\n')
+    print('OPCIONES:')
+    print('-> 1. Leer un fichero y crear una lista ordenada con ellos.')
+    print('-> 2. Determinar la media de préstamos por libro.')
+    print('-> 3. Eliminar libros con mismo título y autor, dejando la versión más reciente.')
+    print('-> 4. Consultar que libros quedan en la biblioteca.')
+    print('->     4a. Todos.')
+    print('->     4b. Por año.')
+    print('->     4c. Por autor.')
+    print('-> 5. Cerrar el programa.\n')
+
 def create_book_list(path):
     '''
     '''
@@ -43,5 +57,6 @@ def get_avg_loans(bl):
     print(avg_loans)
 
 if __name__ == "__main__":
-    ruta = 'libros.txt'
-    listadelibros = create_book_list(ruta)
+    print_menu()
+    while True:
+        option = int(input('Introduzca la opción que desee utilizar:'))
