@@ -2,7 +2,7 @@
 import sys
 from array_ordered_positional_list import ArrayOrderedPositionalList as PositionalList1
 from linked_ordered_positional_list import LinkedOrderedPositionalList as PositionalList2
-from libro import Libro
+from book import Book
 
 def create_book_from_line(params):
     '''
@@ -10,7 +10,7 @@ def create_book_from_line(params):
     titulo, autor = params[0:2]
     año, prestamos = int(params[2]), int(params[3])
     
-    return Libro(titulo, autor, año, prestamos)
+    return Book(titulo, autor, año, prestamos)
 
 def create_book_list(path):
     '''
@@ -23,10 +23,28 @@ def create_book_list(path):
     return book_list
 
 def get_avg_loans(bl):
+    sum, n = 0, 0
+    avg_loans = {}
+    current_title = ''
+    # recorrer la lista
+    # almacenar el titulo actual y sumarle 1 a n
+    # guardar loans en sum
+    # si el titulo cambia resetear sum y n, y devolver la media
     
-    pass
+    for libro in bl:
+        if current_title == libro.get_title():
+            sum += libro.get_loans()
+            n += 1
+        else:
+            avg_loans[current_title] = sum/n
+            current_title = libro.get_title()
+            sum, n = 0, 0
+    
+    print(avg_loans)
 
 if __name__ == "__main__":
     ruta = 'libros.txt'
     listadelibros = create_book_list(ruta)
-    pass
+    for i in listadelibros:
+        if 'Ruiz' in i.get_author():
+            print(i.get_author(), i.get_title(), i.get_year(), i.get_loans(), sep = ' | ')

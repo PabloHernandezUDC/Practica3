@@ -124,12 +124,6 @@ class LinkedOrderedPositionalList(_DoublyLinkedBase):
     return self._insert_between(e, self._header, self._header._next)
 
   # helper method
-  #def _add_before(self, p, e):
-  #  """Insert element e into list before Position p and return new Position."""
-  #  original = self._validate(p)
-  #  return self._insert_between(e, original._prev, original)
-
-  # helper method
   def _add_after(self, p, e):
     """Insert element e into list after Position p and return new Position."""
     original = self._validate(p)
@@ -147,8 +141,6 @@ class LinkedOrderedPositionalList(_DoublyLinkedBase):
             return self._add_first(e)
         else:
             return self._add_after(p, e)
-
-
 
   def delete(self, p):
     """Remove and return the element at Position p."""
