@@ -35,12 +35,14 @@ class Book():
 
         if a1 > a2:
             return True
-        elif t1 > t2:
-            return True
-        elif y1 > y2:
-            return True
-        else:
-            return False
+        elif a1 == a2:
+            if t1 > t2:
+                return True
+            elif t1 == t2:
+                if y1 > y2:
+                    return True
+                else:
+                    return False
     
     def get_title(self):
         '''

@@ -74,16 +74,9 @@ def show_books(bl, suboption):
         print('-------------------------------------------------------------------------------------------------------------------\n')        
 
 if __name__ == "__main__":
-    '''
     print_menu()
     lista_de_libros = None
-    '''
-    lista_de_libros = create_book_list('libros.txt')
-    for i in lista_de_libros:
-        print(i.get_author(), i.get_title(), i.get_year(), i.get_loans(), sep = ' | ')
-
     
-    '''
     while True:
         # 1. Leer un fichero y crear una lista ordenada de libros.
         # 2. Determinar la media de préstamos por libro.
@@ -135,4 +128,3 @@ if __name__ == "__main__":
         elif option == 5:
             print('Cerrando el programa...\n')
             quit()
-    '''
