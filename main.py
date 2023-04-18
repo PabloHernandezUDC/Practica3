@@ -12,6 +12,16 @@ def create_book_from_line(params):
     
     return Book(titulo, autor, año, prestamos)
 
+def create_book_list(path):
+    '''
+    '''
+    with open(path) as f:
+        book_list = PositionalList1()
+        for elemento in f.readlines():
+            book_list.add(create_book_from_line(elemento.split('; ')))
+            
+    return book_list
+
 def print_menu():
     '''
     '''
@@ -36,16 +46,6 @@ def ask_for_option():
     
     return opt
 
-def create_book_list(path):
-    '''
-    '''
-    with open(path) as f:
-        book_list = PositionalList1()
-        for elemento in f.readlines():
-            book_list.add(create_book_from_line(elemento.split('; ')))
-            
-    return book_list
-
 def avg_loans(bl):
     sum, n = 0, 0
     for libro in bl:
@@ -54,10 +54,17 @@ def avg_loans(bl):
     print('La media de préstamos es de {}.'.format(round(sum/n, 2)))
 
 def remove_duplicates(bl):
-    unique_books = PositionalList1()
-    for libro in bl:
-        if libro not in unique_books:
-            unique_books.add(libro)
+    unique_books = bl
+    for i in range(1, len(unique_books)):
+        l = len(unique_books)
+        if i < l:
+            libro = unique_books.get_element(i)
+            prev = unique_books.get_element(i - 1)
+            if prev is not None and libro.get_title() == prev.get_title() and libro.get_year() >= prev.get_year():
+                unique_books.delete(i - 1)
+
+    print('Hecho.')
+
 
 def show_books(bl, suboption):
     if suboption == 'a':
@@ -113,7 +120,6 @@ if __name__ == "__main__":
                 print('Debes ejecutar la opción 1 primero.')
             else:
                 remove_duplicates(lista_de_libros)
-                print('Hecho.')
         
         elif option == 4:
             if lista_de_libros == None:
