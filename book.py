@@ -29,6 +29,8 @@ class Book():
             return False
         
     def __ge__(self, other):
+        return self > other
+        '''
         a1, a2 = self.get_author().lower(), other.get_author().lower()
         t1, t2 = self.get_title().lower(), other.get_title().lower()
         y1, y2 = self.get_year(), other.get_year()
@@ -43,6 +45,7 @@ class Book():
                     return True
                 else:
                     return False
+        '''
     
     def get_title(self):
         '''

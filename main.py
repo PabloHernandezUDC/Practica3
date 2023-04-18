@@ -34,19 +34,22 @@ def print_menu():
     print('->     4a. Todos.')
     print('->     4b. Por año.')
     print('->     4c. Por autor.')
-    print('-> 5. Cerrar el programa.\n')
+    print('-> 5. Mostrar este menú.')
+    print('-> 6. Cerrar el programa.\n')
 
 def ask_for_option():
     '''
     '''
     opt = int(input('Introduzca la opción que desee utilizar: '))
-    while type(opt) is not int or not 1 <= opt <= 5:
+    while type(opt) is not int or not 1 <= opt <= 6:
         print('Esa opción es incorrecta.')
         opt = int(input('Introduzca la opción que desee utilizar: '))
     
     return opt
 
 def avg_loans(bl):
+    '''
+    '''
     sum, n = 0, 0
     for libro in bl:
         sum += libro.get_loans()
@@ -54,23 +57,30 @@ def avg_loans(bl):
     print('La media de préstamos es de {}.'.format(round(sum/n, 2)))
 
 def remove_duplicates(bl):
+    '''
+    '''
     unique_books = bl
-    for i in range(1, len(unique_books)):
-        l = len(unique_books)
-        if i < l:
-            libro = unique_books.get_element(i)
-            prev = unique_books.get_element(i - 1)
-            if prev is not None and libro.get_title() == prev.get_title() and libro.get_year() >= prev.get_year():
-                unique_books.delete(i - 1)
+    marker = unique_books.last()
+    while marker > 0:
+        prev = marker - 1
+        marker_book, prev_book = unique_books.get_element(marker), unique_books.get_element(prev)
+        
+        if marker_book.get_title() == prev_book.get_title() and marker_book.get_year() >= prev_book.get_year():
+            unique_books.delete(prev)
+        marker -= 1
+
 
     print('Hecho.')
+    return unique_books
 
 
 def show_books(bl, suboption):
+    '''
+    '''
     if suboption == 'a':
-        print('\n-------------------------------------------------------------------------------------------------------------------')
+        print('\n———————————————————————————————————————————————————————————————————————————————————————————————————————————————————')
         print('|  {:<37}|  {:<30}|  {:<18}|  {:<17}|'.format('Título', 'Autor', 'Año de edición', 'Nº de préstamos'))
-        print('-------------------------------------------------------------------------------------------------------------------')
+        print('———————————————————————————————————————————————————————————————————————————————————————————————————————————————————')
         for libro in bl:
             print('|  {:<37}|  {:<30}|  {:<18}|  {:<17}|'.format(
                 libro.get_title(),
@@ -78,7 +88,7 @@ def show_books(bl, suboption):
                 libro.get_year(),
                 libro.get_loans()
             ))
-        print('-------------------------------------------------------------------------------------------------------------------\n')        
+        print('———————————————————————————————————————————————————————————————————————————————————————————————————————————————————\n')        
 
 if __name__ == "__main__":
     print_menu()
@@ -119,7 +129,7 @@ if __name__ == "__main__":
             if lista_de_libros == None:
                 print('Debes ejecutar la opción 1 primero.')
             else:
-                remove_duplicates(lista_de_libros)
+                lista_de_libros = remove_duplicates(lista_de_libros)
         
         elif option == 4:
             if lista_de_libros == None:
@@ -132,5 +142,8 @@ if __name__ == "__main__":
                 show_books(lista_de_libros, subopt)
                 
         elif option == 5:
+            print_menu()
+            
+        elif option == 6:
             print('Cerrando el programa...\n')
             quit()
