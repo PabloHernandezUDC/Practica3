@@ -16,7 +16,7 @@ def create_book_list(path):
     '''
     '''
     with open(path) as f:
-        book_list = PositionalList1()
+        book_list = PositionalList2()
         for elemento in f.readlines():
             book_list.add(create_book_from_line(elemento.split('; ')))
             
@@ -25,25 +25,32 @@ def create_book_list(path):
 def print_menu():
     '''
     '''
-    print('\nSISTEMA DE BIBLIOTECA\n')
+    print('\n————————SISTEMA DE BIBLIOTECA—————————\n')
     print('OPCIONES:')
-    print('-> 1. Leer un fichero y crear una lista ordenada de libros.')
-    print('-> 2. Determinar la media de préstamos por libro.')
+    print('-> 1. Leer un fichero y crear una lista ordenada de libros (sobreescribe la lista actual).')
+    print('-> 2. Determinar la media de préstamos.')
     print('-> 3. Eliminar libros con mismo título y autor, dejando la versión más reciente.')
-    print('-> 4. Consultar que libros quedan en la biblioteca.')
+    print('-> 4. Consultar los libros que quedan en la biblioteca.')
     print('->     4a. Todos.')
     print('->     4b. Por año.')
     print('->     4c. Por autor.')
     print('-> 5. Mostrar este menú.')
     print('-> 6. Cerrar el programa.\n')
 
-def ask_for_option():
+def ask_for_option(max_options: int):
     '''
     '''
-    opt = int(input('Introduzca la opción que desee utilizar: '))
-    while type(opt) is not int or not 1 <= opt <= 6:
-        print('Esa opción es incorrecta.')
-        opt = int(input('Introduzca la opción que desee utilizar: '))
+    while True:
+        try:
+            opt = int(input('Introduzca la opción que desee utilizar: '))
+            if not 1 <= opt <= max_options:
+                raise TypeError()
+            else:
+                break            
+        except TypeError:
+            print('Esa opción no está entre los números válidos.')
+        except:
+            print('Eso no es un número.')
     
     return opt
 
@@ -54,7 +61,7 @@ def avg_loans(bl):
     for libro in bl:
         sum += libro.get_loans()
         n += 1
-    print('La media de préstamos es de {}.'.format(round(sum/n, 2)))
+    print('La media es de {} préstamos.'.format(round(sum/n, 2)))
 
 def remove_duplicates(bl):
     '''
@@ -69,55 +76,77 @@ def remove_duplicates(bl):
             unique_books.delete(prev)
         marker -= 1
 
-
-    print('Hecho.')
     return unique_books
 
 
-def show_books(bl, suboption):
+def show_books(bl):
     '''
     '''
+    valid_options = ['a', 'b', 'c']
+    while True:
+        suboption = input('Introduzca opción a, b o c: ')
+        if suboption not in valid_options:
+            print('Esa opción no es válida. Por favor, introduzca otra.')
+        else:
+            break
+    
     if suboption == 'a':
-        print('\n———————————————————————————————————————————————————————————————————————————————————————————————————————————————————')
-        print('|  {:<37}|  {:<30}|  {:<18}|  {:<17}|'.format('Título', 'Autor', 'Año de edición', 'Nº de préstamos'))
-        print('———————————————————————————————————————————————————————————————————————————————————————————————————————————————————')
+        lista_a_imprimir = bl
+    else:
+        lista_a_imprimir = PositionalList2()
+
+    if suboption == 'b':
+        while True:
+            try:
+                año = int(input('Introduzca el año para consultar los libros publicados durante el mismo: '))
+                break
+            except:
+                print('Debe introducir un número.')
+
         for libro in bl:
-            print('|  {:<37}|  {:<30}|  {:<18}|  {:<17}|'.format(
-                libro.get_title(),
-                libro.get_author(),
-                libro.get_year(),
-                libro.get_loans()
-            ))
-        print('———————————————————————————————————————————————————————————————————————————————————————————————————————————————————\n')        
+            if libro.get_year() == año:
+                lista_a_imprimir.add(libro)
+
+    elif suboption == 'c':
+        while True:
+            try:
+                autor = input('Introduzca el autor para consultar lps libros que ha publicado: ')
+                break
+            except:
+                print('Debe introducir un número.')
+
+        for libro in bl:
+            if libro.get_author() == autor:
+                lista_a_imprimir.add(libro)
+        pass
+    
+    print('\n———————————————————————————————————————————————————————————————————————————————————————————————————————————————————')
+    print('|  {:<37}|  {:<30}|  {:<18}|  {:<17}|'.format('Título', 'Autor', 'Año de edición', 'Nº de préstamos'))
+    print('———————————————————————————————————————————————————————————————————————————————————————————————————————————————————')
+    for libro in lista_a_imprimir:
+        print('|  {:<37}|  {:<30}|  {:<18}|  {:<17}|'.format(
+            libro.get_title(),
+            libro.get_author(),
+            libro.get_year(),
+            libro.get_loans()
+        ))
+    print('———————————————————————————————————————————————————————————————————————————————————————————————————————————————————\n')        
 
 if __name__ == "__main__":
     print_menu()
     lista_de_libros = None
     
     while True:
-        # 1. Leer un fichero y crear una lista ordenada de libros.
-        # 2. Determinar la media de préstamos por libro.
-        # 3. Eliminar libros con mismo título y autor, dejando la versión más reciente.
-        # 4. Consultar que libros quedan en la biblioteca.
-        #     4a. Todos.
-        #     4b. Por año.
-        #     4c. Por autor.
-        # 5. Cerrar el programa.
-        option = ask_for_option()
+        option = ask_for_option(6)
         
         if option == 1:
-            ruta = str(input('Introduzca el nombre del archivo que desea utilizar (debe estar en el mismo directorio): '))
-            while type(ruta) is not str:
-                ruta = str(input('Introduzca el nombre del archivo que desea utilizar (debe estar en el mismo directorio): '))
             while True:
+                ruta = input('Introduzca el nombre del archivo que desea utilizar (debe estar en el mismo directorio): ')
                 try:
                     lista_de_libros = create_book_list(ruta)
                     break
                 except:
                     print('Esa ruta de archivo no es válida. Por favor, introduce otra.')
-                    ruta = str(input('Introduzca el nombre del archivo que desea utilizar (debe estar en el mismo directorio): '))
-                    while type(ruta) is not str:
-                        ruta = str(input('Introduzca el nombre del archivo que desea utilizar (debe estar en el mismo directorio): '))
         
         elif option == 2:
             if lista_de_libros == None:
@@ -130,16 +159,13 @@ if __name__ == "__main__":
                 print('Debes ejecutar la opción 1 primero.')
             else:
                 lista_de_libros = remove_duplicates(lista_de_libros)
+                print('Hecho.')
         
         elif option == 4:
             if lista_de_libros == None:
                 print('Debes ejecutar la opción 1 primero.')
             else:
-                subopt = str(input('Introduzca la opción a, b o c: '))
-                while type(subopt) is not str:
-                    subopt = str(input('Introduzca la opción a, b o c: '))
-
-                show_books(lista_de_libros, subopt)
+                show_books(lista_de_libros)
                 
         elif option == 5:
             print_menu()
