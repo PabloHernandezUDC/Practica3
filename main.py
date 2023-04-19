@@ -11,11 +11,15 @@ def create_book_from_line(params):
     
     return Book(titulo, autor, año, prestamos)
 
-def create_book_list(path):
+def create_book_list(path, t):
     '''
     '''
     with open(path) as f:
-        book_list = PositionalList2()
+        if t == 1:
+            book_list = PositionalList1()
+        elif t == 2:
+            book_list = PositionalList2()
+
         for elemento in f.readlines():
             book_list.add(create_book_from_line(elemento.split('; ')))
             
@@ -68,19 +72,18 @@ def remove_duplicates(bl):
     unique_books = bl
     marker = unique_books.last()
     
-    while marker != unique_books.first() and marker != None:
-        print(marker)
+    while unique_books.before(marker) != None:
         prev = unique_books.before(marker)
-        
         marker_book, prev_book = unique_books.get_element(marker), unique_books.get_element(prev)
                 
         if marker_book.get_title() == prev_book.get_title() and marker_book.get_year() >= prev_book.get_year():
             unique_books.delete(prev)
-        marker = unique_books.before(marker)
+        else:
+            marker = unique_books.before(marker)
                 
     return unique_books
 
-def show_books(bl):
+def show_books(bl, t):
     '''
     '''
     valid_options = ['a', 'b', 'c']
@@ -94,7 +97,10 @@ def show_books(bl):
     if suboption == 'a':
         lista_a_imprimir = bl
     else:
-        lista_a_imprimir = PositionalList2()
+        if t == 1:
+            lista_a_imprimir = PositionalList1()
+        elif t == 2:
+            lista_a_imprimir = PositionalList2()
 
     if suboption == 'b':
         while True:
@@ -134,16 +140,18 @@ def show_books(bl):
     print('———————————————————————————————————————————————————————————————————————————————————————————————————————————————————\n')        
 
 if __name__ == "__main__":
-    print_menu()
+    tipo_de_lista = 1
     lista_de_libros = None
     
+    print_menu()
+
     while True:
         option = ask_for_option(6)
         if option == 1:
             while True:
                 ruta = input('Introduzca el nombre del archivo que desea utilizar (debe estar en el mismo directorio): ')
                 try:
-                    lista_de_libros = create_book_list(ruta)
+                    lista_de_libros = create_book_list(ruta, tipo_de_lista)
                     break
                 except:
                     print('Esa ruta de archivo no es válida. Por favor, introduce otra.')
@@ -165,7 +173,7 @@ if __name__ == "__main__":
             if lista_de_libros == None:
                 print('Debes ejecutar la opción 1 primero.')
             else:
-                show_books(lista_de_libros)
+                show_books(lista_de_libros, tipo_de_lista)
                 
         elif option == 5:
             print_menu()
