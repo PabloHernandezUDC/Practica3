@@ -1,5 +1,4 @@
 # Pablo Hernandez Martinez, pablo.hernandez.martinez@udc.es - Marcelo Ferreiro Sánchez, marcelo.fsanchez@udc.es
-import sys
 from array_ordered_positional_list import ArrayOrderedPositionalList as PositionalList1
 from linked_ordered_positional_list import LinkedOrderedPositionalList as PositionalList2
 from book import Book
@@ -78,7 +77,6 @@ def remove_duplicates(bl):
 
     return unique_books
 
-
 def show_books(bl):
     '''
     '''
@@ -138,7 +136,6 @@ if __name__ == "__main__":
     
     while True:
         option = ask_for_option(6)
-        
         if option == 1:
             while True:
                 ruta = input('Introduzca el nombre del archivo que desea utilizar (debe estar en el mismo directorio): ')
