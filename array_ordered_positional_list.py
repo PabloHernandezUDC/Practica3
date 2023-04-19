@@ -48,6 +48,7 @@ class ArrayOrderedPositionalList:
         return None
     else:
         raise IndexError('p is not a valid position')
+    
 
   def after(self, p):
     """Return the Position just after Position p (or None if p is last)."""
@@ -69,6 +70,14 @@ class ArrayOrderedPositionalList:
   def __iter__(self):
     """Generate a forward iteration of the elements of the list."""
     return iter(self._data)
+
+# Otra opción más procedimental
+#  def __iter__(self):
+#    """Generate a forward iteration of the elements of the list."""
+#    cursor = self.first()
+#    while cursor is not None:
+#      yield self.get_element(cursor)
+#      cursor = self.after(cursor)
     
   def get_element(self, p):
     """Return the Element at position p of the list."""
@@ -85,7 +94,7 @@ class ArrayOrderedPositionalList:
         self._data.append(e)
         return len(self._data) - 1
     else:
-        self._data.append(None)  # increase the size of data
+        self._data.append(None)  # increase the suze of data
         p = len(self._data) - 2
         while p >= 0 and self._data[p] >= e:
             self._data[p + 1] = self._data[p]
@@ -93,6 +102,18 @@ class ArrayOrderedPositionalList:
         self._data[p + 1] = e 
         return p + 1
     
+#  def add(self, e):
+#    """Insert element e into list and return new Position."""
+#    if self.is_empty() or e > self._data[len(self._data) - 1]:
+#        self._data.append(e)
+#        return len(self._data) - 1
+#    else:
+#        p = len(self._data) - 1
+#        while p >= 0 and self._data[p] >= e:
+#            p -= 1
+#        return self._data.insert(p + 1, e) 
+#        return p + 1
+
   def delete(self, p):
     """Remove and return the element at Position p."""
     return self._data.pop(p)   # if p is not valid, it raises an exception
