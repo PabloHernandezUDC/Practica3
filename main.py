@@ -67,14 +67,17 @@ def remove_duplicates(bl):
     '''
     unique_books = bl
     marker = unique_books.last()
-    while marker > 0:
-        prev = marker - 1
-        marker_book, prev_book = unique_books.get_element(marker), unique_books.get_element(prev)
+    
+    while marker != unique_books.first() and marker != None:
+        print(marker)
+        prev = unique_books.before(marker)
         
+        marker_book, prev_book = unique_books.get_element(marker), unique_books.get_element(prev)
+                
         if marker_book.get_title() == prev_book.get_title() and marker_book.get_year() >= prev_book.get_year():
             unique_books.delete(prev)
-        marker -= 1
-
+        marker = unique_books.before(marker)
+                
     return unique_books
 
 def show_books(bl):
