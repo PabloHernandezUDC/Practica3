@@ -5,6 +5,17 @@ from book import Book
 
 def create_book_from_line(params):
     '''
+    Creates a book from a line of information of the .txt file that the program is running through.
+
+    Paramenters
+    -------------
+    params: str
+        line of text that contains the book's information.
+    Returns
+    ----------
+    Book(título,autor,año,prestamos)
+        Book class object containing the book's data.
+
     '''
     titulo, autor = params[0:2]
     año, prestamos = int(params[2]), int(params[3])
@@ -13,11 +24,24 @@ def create_book_from_line(params):
 
 def create_book_list(path, t):
     '''
+    Creates a books list.
+
+    Paramenters
+    -------------
+    path: file
+        Name of a file in the actual directory.
+    t: int
+        Number used to choose which positional list to generate.
+    Returns
+    ----------
+    Book(título,autor,año,prestamos)
+        Book class object containing the book's data.
+
     '''
     with open(path) as f:
         if t == 1:
             book_list = PositionalList1()
-        elif t == 2:
+        else:
             book_list = PositionalList2()
 
         for elemento in f.readlines():
@@ -27,6 +51,15 @@ def create_book_list(path, t):
 
 def print_menu():
     '''
+    Prints a text menu.
+
+    Parameters
+    ----------
+    None.
+
+    Returns
+    ----------
+    None.
     '''
     print('\n————————SISTEMA DE BIBLIOTECA—————————\n')
     print('OPCIONES:')
@@ -42,6 +75,18 @@ def print_menu():
 
 def ask_for_option(max_options: int):
     '''
+    A function that prints a line of text asking the user to choose an option of the menu
+
+    Parameters
+    ------------
+    max_options: int
+        Int used to limit the max amount of options in the menu.
+    
+    Returns
+    -----------
+    opt: int
+        The chosen option.
+
     '''
     while True:
         try:
@@ -59,6 +104,17 @@ def ask_for_option(max_options: int):
 
 def avg_loans(bl):
     '''
+    A functions that calculates AND prints the average number of loans of a list of books.
+
+    Parameters
+    ------------
+    bl: List
+        The list of books you want to calculate an average of.
+
+    Returns
+    ------------
+    None.
+
     '''
     sum, n = 0, 0
     for libro in bl:
@@ -68,6 +124,17 @@ def avg_loans(bl):
 
 def remove_duplicates(bl):
     '''
+    A function that removes duplicates books from a list of books.
+
+    Parameters
+    ------------
+    bl: List
+        The list of books you want to remove the duplicates of.
+
+    Returns
+    ------------
+    unique_books: list
+        The new list, with the same books but with the duplicates removed.
     '''
     unique_books = bl
     marker = unique_books.last()
@@ -85,6 +152,18 @@ def remove_duplicates(bl):
 
 def show_books(bl, t):
     '''
+    A function that prints all current books according to different filters and criteria..
+
+    Parameters
+    -----------
+    bl: List
+        list of books that the function will operate on.
+    t: int
+        Number used to choose which positional list to generate.
+
+    Returns
+    -------
+    None.
     '''
     valid_options = ['a', 'b', 'c']
     while True:
@@ -99,7 +178,7 @@ def show_books(bl, t):
     else:
         if t == 1:
             lista_a_imprimir = PositionalList1()
-        elif t == 2:
+        else:
             lista_a_imprimir = PositionalList2()
 
     if suboption == 'b':
@@ -117,7 +196,7 @@ def show_books(bl, t):
     elif suboption == 'c':
         while True:
             try:
-                autor = input('Introduzca el autor para consultar lps libros que ha publicado: ')
+                autor = input('Introduzca el autor para consultar los libros que ha publicado: ')
                 break
             except:
                 print('Debe introducir un número.')
@@ -140,7 +219,7 @@ def show_books(bl, t):
     print('———————————————————————————————————————————————————————————————————————————————————————————————————————————————————\n')        
 
 if __name__ == "__main__":
-    tipo_de_lista = 1
+    tipo_de_lista = 2
     lista_de_libros = None
     
     print_menu()
