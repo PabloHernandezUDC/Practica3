@@ -145,8 +145,9 @@ def remove_duplicates(bl):
         marker_book, prev_book = unique_books.get_element(marker), unique_books.get_element(prev)
                 
         if marker_book.get_title() == prev_book.get_title() and marker_book.get_year() >= prev_book.get_year():
-            print(f'Borrando libro con título {prev_book.get_title()} y año de edición {prev_book.get_year()}...')
             unique_books.delete(prev)
+            if isinstance(unique_books, PositionalList1):
+                marker = prev
         else:
             marker = prev
                 
