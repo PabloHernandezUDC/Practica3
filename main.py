@@ -39,13 +39,13 @@ def create_book_list(path, t):
 
     '''
     with open(path) as f:
-        if t == 1:
+        if t == 1:                                                    # this if statement decides which list type we should use
             book_list = PositionalList1()
         else:
             book_list = PositionalList2()
 
         for elemento in f.readlines():
-            book_list.add(create_book_from_line(elemento.split('; ')))
+            book_list.add(create_book_from_line(elemento.split('; '))) # add a book created from the current line
             
     return book_list
 
@@ -58,7 +58,7 @@ def print_menu():
     None.
 
     Returns
-    ----------
+    -------
     None.
     '''
     print('\n————————SISTEMA DE BIBLIOTECA—————————\n')
@@ -70,6 +70,7 @@ def print_menu():
     print('->     4a. Todos.')
     print('->     4b. Por año.')
     print('->     4c. Por autor.')
+    print('->     4d. Por año y por autor.')
     print('-> 5. Mostrar este menú.')
     print('-> 6. Cerrar el programa.\n')
 
@@ -78,17 +79,17 @@ def ask_for_option(max_options: int):
     A function that prints a line of text asking the user to choose an option of the menu
 
     Parameters
-    ------------
+    ----------
     max_options: int
         Int used to limit the max amount of options in the menu.
     
     Returns
-    -----------
+    --------
     opt: int
         The chosen option.
 
     '''
-    while True:
+    while True:                                                             # this while loop ensures the user enters a valid option
         try:
             opt = int(input('Introduzca la opción que desee utilizar: '))
             if not 1 <= opt <= max_options:
@@ -120,7 +121,7 @@ def avg_loans(bl):
     for libro in bl:
         sum += libro.get_loans()
         n += 1
-    print('La media es de {} préstamos.'.format(round(sum/n, 2)))
+    print('La media es de {} préstamos.'.format(round(sum/n, 2))) # result is rounded to make it more visually appealing
 
 def remove_duplicates(bl):
     '''
@@ -136,21 +137,23 @@ def remove_duplicates(bl):
     unique_books: list
         The new list, with the same books but with the duplicates removed.
     '''
-    unique_books = bl
-    marker = unique_books.last()
+    unique_books = bl                       # create a new list where we'll only keep 1 of each book
+    marker = unique_books.last()            # pick the last book's position to start traversing the original list
     
-    while unique_books.before(marker) != None:
-        prev = unique_books.before(marker)
+    while unique_books.before(marker) != None: # while the marker isnt first
+        prev = unique_books.before(marker)     # fetch the previous book's position
+        # actually fetch the book objects according to their positions
         marker_book, prev_book = unique_books.get_element(marker), unique_books.get_element(prev)
                 
-        if marker_book.get_title() == prev_book.get_title() and marker_book.get_year() >= prev_book.get_year():
-            unique_books.delete(prev)
+        if marker_book.get_title() == prev_book.get_title() and marker_book.get_year() >= prev_book.get_year(): # if the previous book has the same nameand a sooner year
+            unique_books.delete(prev) # delete the previous one
+            # this logic advances the marker depending on the type of list
             if isinstance(unique_books, PositionalList1):
                 marker = prev
         else:
             marker = prev
                 
-    return unique_books
+    return unique_books # return the list with all the unique AND latest books
 
 def show_books(bl, t):
     '''
@@ -167,23 +170,24 @@ def show_books(bl, t):
     -------
     None.
     '''
-    valid_options = ['a', 'b', 'c']
+    valid_options = ['a', 'b', 'c', 'd']
+    año, autor = None, None
     while True:
-        suboption = input('Introduzca opción a, b o c: ')
+        suboption = input('Introduzca opción a, b, c o d: ')
         if suboption not in valid_options:
             print('Esa opción no es válida. Por favor, introduzca otra.')
         else:
             break
     
-    if suboption == 'a':
+    if suboption == 'a': # this is the only case where we want to print the whole original list
         lista_a_imprimir = bl
     else:
-        if t == 1:
+        if t == 1: # this if statement decides which list type we should use
             lista_a_imprimir = PositionalList1()
         else:
             lista_a_imprimir = PositionalList2()
 
-    if suboption == 'b':
+    if suboption == 'b' or suboption == 'd': # both b and d use years
         while True:
             try:
                 año = int(input('Introduzca el año para consultar los libros publicados durante el mismo: '))
@@ -191,11 +195,7 @@ def show_books(bl, t):
             except:
                 print('Debe introducir un número.')
 
-        for libro in bl:
-            if libro.get_year() == año:
-                lista_a_imprimir.add(libro)
-
-    elif suboption == 'c':
+    if suboption == 'c' or suboption == 'd': # both c and d use authors
         while True:
             try:
                 autor = input('Introduzca el autor para consultar los libros que ha publicado: ')
@@ -203,11 +203,21 @@ def show_books(bl, t):
             except:
                 print('Debe introducir un número.')
 
+    if suboption != 'a':
         for libro in bl:
-            if libro.get_author() == autor:
+            first_condition_met = False
+            # some logic to avoid adding books twice due to the d option criteria
+            if libro.get_year() == año and (suboption == 'b' or suboption == 'd'):
+                if suboption != 'd':
+                    lista_a_imprimir.add(libro)
+                else:
+                    first_condition_met = True
+            if libro.get_author() == autor and suboption == 'c':
                 lista_a_imprimir.add(libro)
-        pass
+            if libro.get_author() == autor and suboption == 'd' and first_condition_met == True:
+                lista_a_imprimir.add(libro)
     
+    # printing it out with nice format
     print('\n———————————————————————————————————————————————————————————————————————————————————————————————————————————————————')
     print('|  {:<37}|  {:<30}|  {:<18}|  {:<17}|'.format('Título', 'Autor', 'Año de edición', 'Nº de préstamos'))
     print('———————————————————————————————————————————————————————————————————————————————————————————————————————————————————')
@@ -221,7 +231,7 @@ def show_books(bl, t):
     print('———————————————————————————————————————————————————————————————————————————————————————————————————————————————————\n')        
 
 if __name__ == "__main__":
-    tipo_de_lista = 2
+    tipo_de_lista = 1               # 1: ArrayOrderedPositionalList,        2: LinkedOrderedPositionalList
     lista_de_libros = None
     
     print_menu()
