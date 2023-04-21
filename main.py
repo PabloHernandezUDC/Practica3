@@ -138,7 +138,6 @@ def remove_duplicates(bl):
     '''
     unique_books = bl
     marker = unique_books.last()
-    print(f'Estamos tratando con una lista de tipo {type(unique_books)}.')
     
     while unique_books.before(marker) != None:
         prev = unique_books.before(marker)
