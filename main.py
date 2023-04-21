@@ -138,15 +138,17 @@ def remove_duplicates(bl):
     '''
     unique_books = bl
     marker = unique_books.last()
+    print(f'Estamos tratando con una lista de tipo {type(unique_books)}.')
     
     while unique_books.before(marker) != None:
         prev = unique_books.before(marker)
         marker_book, prev_book = unique_books.get_element(marker), unique_books.get_element(prev)
                 
         if marker_book.get_title() == prev_book.get_title() and marker_book.get_year() >= prev_book.get_year():
+            print(f'Borrando libro con título {prev_book.get_title()} y año de edición {prev_book.get_year()}...')
             unique_books.delete(prev)
         else:
-            marker = unique_books.before(marker)
+            marker = prev
                 
     return unique_books
 
